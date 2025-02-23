@@ -14,7 +14,7 @@ services:
     environment:
       - APP_ENV=local
     networks:
-      - app-network
+      - e_commerce_app-network
 
   nginx:
     image: nginx:alpine
@@ -27,7 +27,7 @@ services:
     depends_on:
       - app
     networks:
-      - app-network
+      - e_commerce_app-network
 
   node:
     platform: linux/arm64/v8
@@ -44,12 +44,12 @@ services:
       - ./:/var/www
       - /var/www/node_modules
     networks:
-      - app-network
+      - e_commerce_app-network
 
   db:
-    platform: linux/x86_64 #this line is optional if you are using Mac Silicon chip (M1/M2/M3)
     image: mysql:8.0
     container_name: my-mysql
+    hostname: mysql
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: ${DB_DATABASE}
@@ -59,12 +59,13 @@ services:
     volumes:
       - dbdata:/var/lib/mysql
     networks:
-      - app-network
+      - e_commerce_app-network
     ports:
-      - "3306:3306"
+      - "127.0.0.1:4306:3306"
 
 networks:
-  app-network:
+  e_commerce_app-network:
+#   app-network:
     driver: bridge
 
 volumes:
